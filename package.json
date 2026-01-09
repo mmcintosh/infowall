@@ -2,7 +2,7 @@
   "name": "infowall",
   "version": "0.1.0",
   "private": true,
-  "description": "A SonicJS headless CMS application",
+  "description": "Infowall.net - Production SonicJS instance for testing and showcasing features",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",

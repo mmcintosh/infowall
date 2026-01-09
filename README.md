@@ -1,129 +1,104 @@
-# My SonicJS Application
+# Infowall.net
 
-A modern headless CMS built with [SonicJS](https://sonicjs.com) on Cloudflare's edge platform.
+Production SonicJS instance for infowall.net - A modern information hub built on Cloudflare's edge platform.
+
+## About
+
+This is a production website built with [SonicJS](https://sonicjs.com), a TypeScript-first headless CMS designed for Cloudflare Workers. The site serves as both a real-world application and a testing ground for SonicJS features.
+
+## Technology Stack
+
+- **SonicJS** - Headless CMS on Cloudflare Workers
+- **Cloudflare D1** - SQLite database at the edge
+- **Cloudflare R2** - Object storage for media
+- **Cloudflare KV** - Caching layer
+- **TypeScript** - Type-safe development
+- **Hono.js** - Web framework
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18 or higher
-- A Cloudflare account (free tier works great)
-- Wrangler CLI (installed with dependencies)
+- Node.js 18+
+- Cloudflare account
+- Wrangler CLI
 
-### Installation
+### Development Setup
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+```bash
+# Install dependencies
+npm install
 
-2. **Create your D1 database:**
-   ```bash
-   npx wrangler d1 create my-sonicjs-db
-   ```
+# Create local D1 database
+wrangler d1 create local-d1
 
-   Copy the `database_id` from the output and update it in `wrangler.toml`.
+# Update wrangler.toml with database_id from above
 
-3. **Create your R2 bucket:**
-   ```bash
-   npx wrangler r2 bucket create my-sonicjs-media
-   ```
+# Apply migrations
+npm run db:migrate:local
 
-4. **Run migrations:**
-   ```bash
-   npm run db:migrate:local
-   ```
+# Seed admin user
+npm run seed
 
-5. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
+# Start development server
+npm run dev
+```
 
-6. **Open your browser:**
-   Navigate to `http://localhost:8787/admin` to access the admin interface.
+Access the admin at: http://localhost:8787/admin
 
-   Use the admin credentials you provided during project setup.
+### Admin Credentials
+
+- **Email:** mmcintosh@infowall.com
+- **Password:** [as configured during setup]
+
+## Deployment
+
+### Preview Environment
+
+```bash
+# Deploy to preview
+wrangler deploy --env preview
+```
+
+### Production
+
+```bash
+# Create production database
+wrangler d1 create infowall-prod-db
+
+# Update production wrangler config with database_id
+
+# Apply migrations
+npm run db:migrate
+
+# Deploy
+wrangler deploy --env production
+```
 
 ## Project Structure
 
 ```
-my-sonicjs-app/
+infowall/
 ├── src/
-│   ├── collections/          # Your content type definitions
-│   │   └── blog-posts.collection.ts
-│   └── index.ts             # Application entry point
-├── wrangler.toml            # Cloudflare Workers configuration
-├── package.json
-└── tsconfig.json
+│   ├── collections/     # Content collection definitions
+│   └── index.ts         # Worker entry point
+├── migrations/          # Database migrations (from @sonicjs-cms/core)
+├── scripts/             # Utility scripts
+├── wrangler.toml        # Cloudflare configuration
+└── package.json
 ```
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run deploy` - Deploy to Cloudflare
-- `npm run db:migrate` - Run migrations on production database
-- `npm run db:migrate:local` - Run migrations locally
-- `npm run type-check` - Check TypeScript types
-- `npm run test` - Run tests
-
-## Creating Collections
-
-Collections define your content types. Create a new file in `src/collections/`:
-
-```typescript
-// src/collections/products.collection.ts
-import type { CollectionConfig } from '@sonicjs-cms/core'
-
-export default {
-  name: 'products',
-  label: 'Products',
-  fields: {
-    name: { type: 'text', required: true },
-    price: { type: 'number', required: true },
-    description: { type: 'quill' }
-  }
-} satisfies CollectionConfig
-```
-
-## API Access
-
-Your collections are automatically available via REST API:
-
-- `GET /api/content/blog-posts` - List all blog posts
-- `GET /api/content/blog-posts/:id` - Get a single post
-- `POST /api/content/blog-posts` - Create a post (requires auth)
-- `PUT /api/content/blog-posts/:id` - Update a post (requires auth)
-- `DELETE /api/content/blog-posts/:id` - Delete a post (requires auth)
-
-## Deployment
-
-1. **Login to Cloudflare:**
-   ```bash
-   npx wrangler login
-   ```
-
-2. **Deploy your application:**
-   ```bash
-   npm run deploy
-   ```
-
-3. **Run migrations on production:**
-   ```bash
-   npm run db:migrate
-   ```
 
 ## Documentation
 
 - [SonicJS Documentation](https://sonicjs.com)
-- [Collection Configuration](https://sonicjs.com/collections)
-- [Plugin Development](https://sonicjs.com/plugins)
-- [API Reference](https://sonicjs.com/api)
+- [Cloudflare Workers Docs](https://developers.cloudflare.com/workers/)
+- [Project Plan](../INFOWALL_PROJECT_PLAN.md)
+- [Implementation Guide](../INFOWALL_IMPLEMENTATION_GUIDE.md)
 
-## Support
+## Related Repositories
 
-- [GitHub Issues](https://github.com/lane711/sonicjs/issues)
-- [Discord Community](https://discord.gg/8bMy6bv3sZ)
-- [Documentation](https://sonicjs.com)
+- **SonicJS Core:** [mmcintosh/sonicjs](https://github.com/mmcintosh/sonicjs) (fork)
+- **Upstream:** [lane711/sonicjs](https://github.com/lane711/sonicjs)
 
 ## License
 
